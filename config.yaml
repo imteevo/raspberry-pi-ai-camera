@@ -1,11 +1,14 @@
 # Runtime configuration. CLI flags override these values.
+# Search order when --config isn't given: ./config.yaml,
+# ~/.config/pi-ai-camera/config.yaml, /etc/pi-ai-camera/config.yaml, repo root.
+# Unknown keys are rejected so typos are caught early.
 backend: imx500          # imx500 | hailo
 preview: false           # show a Picamera2 preview window (requires a desktop/display)
 max_frames: 0            # 0 = run until Ctrl+C
 
 detection:
-  threshold: 0.55        # minimum confidence score
-  max_detections: 10
+  threshold: 0.55        # minimum confidence score, 0-1
+  max_detections: 10     # >= 1
   labels_file: null      # optional path to a newline-separated labels file
 
 imx500:
@@ -16,7 +19,10 @@ imx500:
   inference_rate: null   # frames per second
 
 hailo:
-  # Installed by hailo-all (hailo-models). Use the *_h8.hef variants for Hailo-8 (26 TOPS).
-  model: /usr/share/hailo-models/yolov8s_h8l.hef
+  # "auto" picks the HEF for the detected NPU from /usr/share/hailo-models:
+  #   Hailo-8L -> yolov8s_h8l.hef, Hailo-8 -> yolov8s_h8.hef,
+  #   Hailo-10H (AI HAT+ 2) -> yolov8m_h10.hef
+  # Or set an explicit path to a single-output NMS .hef.
+  model: auto
   camera_num: 0
   main_size: [1280, 960]

@@ -12,3 +12,5 @@ captures/
 .DS_Store
 .vscode/
 .idea/
+build/
+dist/

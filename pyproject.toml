@@ -1,0 +1,37 @@
+# Packaging metadata for pi-ai-camera.
+#
+# Runtime dependencies are intentionally EMPTY: PyYAML, numpy, picamera2,
+# OpenCV and HailoRT come from apt (installed by scripts/setup.sh). Letting pip
+# install wheels of numpy etc. into a --system-site-packages venv would shadow
+# the Debian builds that picamera2's compiled extensions (e.g. simplejpeg) are
+# linked against, causing ABI errors like "numpy.dtype size changed".
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pi-ai-camera"
+version = "0.2.0"
+description = "Object detection on Raspberry Pi 5 with the AI Camera (IMX500) or AI HAT+ (Hailo)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+# Only for development/CI off-device; never install these on the Pi itself
+# over the apt packages.
+test = ["pytest>=7", "PyYAML>=6.0", "numpy"]
+
+[project.scripts]
+pi-ai-camera = "pi_ai_camera.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+pi_ai_camera = ["assets/*.txt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

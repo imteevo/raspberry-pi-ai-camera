@@ -1,6 +1,13 @@
-# System packages (installed by scripts/setup.sh via apt, NOT pip):
-#   python3-picamera2  python3-opencv  python3-hailort  imx500-all  hailo-all
-# Create the venv with access to them:
-#   python3 -m venv --system-site-packages .venv
-PyYAML>=6.0
-numpy
+# Runtime dependencies are provided by apt (scripts/setup.sh):
+#   python3-picamera2 python3-opencv python3-yaml python3-numpy python3-hailort
+#   imx500-all hailo-all (or hailo-h10-all)
+#
+# Do NOT pip-install numpy/PyYAML on the Pi: pip wheels shadow the Debian
+# builds that picamera2's C extensions are compiled against.
+#
+# On the Pi:
+#   python3 -m venv --system-site-packages .venv && . .venv/bin/activate
+#   pip install --no-deps -e .
+#
+# Off-device development / CI only:
+#   pip install -e '.[test]'
