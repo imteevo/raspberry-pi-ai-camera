@@ -1,0 +1,6 @@
+# System packages (installed by scripts/setup.sh via apt, NOT pip):
+#   python3-picamera2  python3-opencv  python3-hailort  imx500-all  hailo-all
+# Create the venv with access to them:
+#   python3 -m venv --system-site-packages .venv
+PyYAML>=6.0
+numpy
